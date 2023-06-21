@@ -1,4 +1,4 @@
-package com.example.flutter_waterfall_samples
+package com.wangzhen.flutter.waterfall
 
 import io.flutter.embedding.android.FlutterActivity
 
