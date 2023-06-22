@@ -38,12 +38,14 @@ class _FocusContainerState extends State<FocusContainer>
     _focusNode.addListener(() {
       setState(() {
         _focused = _focusNode.hasFocus;
+      });
+      if (widget.expand) {
         if (_focused) {
           _controller.forward();
         } else {
           _controller.reverse();
         }
-      });
+      }
     });
     super.initState();
   }
