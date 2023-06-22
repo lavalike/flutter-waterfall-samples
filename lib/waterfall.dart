@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_waterfall_samples/data-repository.dart';
+import 'package:flutter_waterfall_samples/focus_container.dart';
+import 'package:flutter_waterfall_samples/movie_data.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 /// waterfall
 /// Created by wangzhen on 2023/6/22
@@ -13,110 +17,62 @@ class _WaterfallState extends State<WaterfallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("waterfall"),
-        centerTitle: true,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(15),
-        children: [
-          Container(
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.orange,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.amberAccent,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.deepOrange,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.cyan,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.indigo,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.blueGrey,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.pink,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.lime,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Colors.teal,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-        ],
-      ),
+      body: _buildBody(),
     );
   }
+
+  _buildBody() => Container(
+        color: Colors.blue.shade900,
+        child: ListView(padding: const EdgeInsets.all(15), children: [
+          _buildMovieTitle(),
+          _buildMovies(),
+          _buildMovieTitle(),
+          _buildMovies(),
+          _buildMovieTitle(),
+          _buildMovies(),
+          _buildMovieTitle(),
+          _buildMovies(),
+        ]),
+      );
+
+  _buildMovieTitle() => Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      child: const Text(
+        "Movies",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+        ),
+      ));
+
+  _buildMovies() {
+    List movies = DataRepository.provideMovies();
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          childAspectRatio: 1 / 0.6),
+      itemCount: movies.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _movieItem(movies[index]);
+      },
+    ).build(context);
+  }
+
+  _movieItem(MovieData data) => FocusContainer(
+        onTap: () {
+          Fluttertoast.showToast(msg: data.title);
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            data.asset,
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
 }
