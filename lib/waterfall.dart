@@ -24,21 +24,7 @@ class _WaterfallState extends State<WaterfallPage> {
   _buildBody() => Container(
         color: Colors.blue.shade900,
         child: ListView(padding: const EdgeInsets.all(15), children: [
-          FocusContainer(
-              expand: false,
-              child: Container(
-                color: Colors.blue,
-                height: 100,
-                child: const Center(
-                  child: Text(
-                    "Test",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
-              )),
+          _buildVideoAndInfo(),
           _buildTitle("Movies One"),
           _buildMovies(),
           _buildTitle("Movies Two"),
@@ -90,4 +76,51 @@ class _WaterfallState extends State<WaterfallPage> {
           ),
         ),
       );
+
+  _buildVideoAndInfo() {
+    return SizedBox(
+      height: 350,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: FocusContainer(
+                expand: false,
+                onTap: () => Fluttertoast.showToast(msg: "video loading"),
+                child: Container(
+                  color: Colors.black,
+                  child: const Center(
+                    child: Text(
+                      "loading",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                )),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            flex: 2,
+            child: FocusContainer(
+                expand: false,
+                onTap: () => Fluttertoast.showToast(msg: "video information"),
+                child: Container(
+                  color: Colors.white10,
+                  child: const Center(
+                    child: Text(
+                      "information",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                )),
+          ),
+        ],
+      ),
+    );
+  }
 }
