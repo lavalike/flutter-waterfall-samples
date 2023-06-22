@@ -43,8 +43,19 @@ class _FocusContainerState extends State<FocusContainer> {
       child: InkWell(
         focusNode: _focusNode,
         onTap: () => widget.onTap?.call(),
-        child: widget.child,
+        child: _focused ? _focusedChild() : widget.child,
       ),
     );
   }
+
+  _focusedChild() => Container(
+        foregroundDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: Colors.white,
+            width: 2,
+          ),
+        ),
+        child: widget.child,
+      );
 }
