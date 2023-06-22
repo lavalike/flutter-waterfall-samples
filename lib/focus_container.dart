@@ -8,11 +8,13 @@ typedef Callback = void Function();
 class FocusContainer extends StatefulWidget {
   final Widget child;
   final Callback? onTap;
+  final bool expand;
 
   const FocusContainer({
     Key? key,
     required this.child,
     this.onTap,
+    this.expand = true,
   }) : super(key: key);
 
   @override
@@ -35,14 +37,11 @@ class _FocusContainerState extends State<FocusContainer>
 
     _focusNode.addListener(() {
       setState(() {
-        bool hasFocus = _focusNode.hasFocus;
-        if (hasFocus != _focused) {
-          _focused = hasFocus;
-          if (hasFocus) {
-            _controller.forward();
-          } else {
-            _controller.reverse();
-          }
+        _focused = _focusNode.hasFocus;
+        if (_focused) {
+          _controller.forward();
+        } else {
+          _controller.reverse();
         }
       });
     });
@@ -51,15 +50,19 @@ class _FocusContainerState extends State<FocusContainer>
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _tween.animate(_controller),
-      child: InkWell(
+    return widget.expand
+        ? ScaleTransition(
+            scale: _tween.animate(_controller),
+            child: _container(),
+          )
+        : _container();
+  }
+
+  _container() => InkWell(
         focusNode: _focusNode,
         onTap: () => widget.onTap?.call(),
         child: _focused ? _focusedChild() : widget.child,
-      ),
-    );
-  }
+      );
 
   _focusedChild() => Container(
         foregroundDecoration: BoxDecoration(

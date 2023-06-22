@@ -24,6 +24,21 @@ class _WaterfallState extends State<WaterfallPage> {
   _buildBody() => Container(
         color: Colors.blue.shade900,
         child: ListView(padding: const EdgeInsets.all(15), children: [
+          FocusContainer(
+              expand: false,
+              child: Container(
+                color: Colors.blue,
+                height: 100,
+                child: const Center(
+                  child: Text(
+                    "Test",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                    ),
+                  ),
+                ),
+              )),
           _buildTitle("Movies One"),
           _buildMovies(),
           _buildTitle("Movies Two"),
