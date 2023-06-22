@@ -19,27 +19,40 @@ class FocusContainer extends StatefulWidget {
   State<StatefulWidget> createState() => _FocusContainerState();
 }
 
-class _FocusContainerState extends State<FocusContainer> {
+class _FocusContainerState extends State<FocusContainer>
+    with TickerProviderStateMixin {
   final FocusNode _focusNode = FocusNode();
   bool _focused = false;
+  final Tween<double> _tween = Tween(begin: 1.0, end: 1.1);
+  late AnimationController _controller;
 
   @override
   void initState() {
-    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+
     _focusNode.addListener(() {
       setState(() {
         bool hasFocus = _focusNode.hasFocus;
         if (hasFocus != _focused) {
           _focused = hasFocus;
+          if (hasFocus) {
+            _controller.forward();
+          } else {
+            _controller.reverse();
+          }
         }
       });
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: _focused ? 1.1 : 1.0,
+    return ScaleTransition(
+      scale: _tween.animate(_controller),
       child: InkWell(
         focusNode: _focusNode,
         onTap: () => widget.onTap?.call(),
