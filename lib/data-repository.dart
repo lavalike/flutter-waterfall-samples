@@ -5,7 +5,7 @@ import 'movie_data.dart';
 class DataRepository {
   static provideMovies() {
     List<MovieData> list = [];
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
       list.add(MovieData(title: "将夜", asset: "assets/images/night.jpg"));
     }
     return list;

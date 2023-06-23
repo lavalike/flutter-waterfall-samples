@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_waterfall_samples/data-repository.dart';
 import 'package:flutter_waterfall_samples/focus_container.dart';
@@ -25,8 +27,8 @@ class _WaterfallState extends State<WaterfallPage> {
         color: Colors.blue.shade900,
         child: ListView(padding: const EdgeInsets.all(30), children: [
           _buildVideoAndInfo(),
-          _buildTitle("Recommend"),
-          _buildMovies(),
+          _buildTitle("相关推荐"),
+          _buildRecommendMovies(),
         ]),
       );
 
@@ -36,38 +38,57 @@ class _WaterfallState extends State<WaterfallPage> {
         title,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 30,
+          fontSize: 25,
           fontWeight: FontWeight.bold,
         ),
       ));
 
-  _buildMovies() {
+  _buildRecommendMovies() {
     List movies = DataRepository.provideMovies();
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          mainAxisSpacing: 15,
-          crossAxisSpacing: 15,
-          childAspectRatio: 1 / 0.6),
+        crossAxisCount: 8,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 15,
+        childAspectRatio: 1 / 1.5,
+      ),
       itemCount: movies.length,
       itemBuilder: (BuildContext context, int index) {
-        return _movieItem(movies[index]);
+        return _recommendMovieItem(movies[index]);
       },
     ).build(context);
   }
 
-  _movieItem(MovieData data) => FocusContainer(
+  _recommendMovieItem(MovieData data) => FocusContainer(
         onTap: () {
           Fluttertoast.showToast(msg: data.title);
         },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            data.asset,
-            fit: BoxFit.cover,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image.asset(
+                  data.asset,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Text(
+              data.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 5),
+          ],
         ),
       );
 
@@ -174,7 +195,7 @@ class _WaterfallState extends State<WaterfallPage> {
                   children: [
                     _buildOperation(Icons.fullscreen, "全屏播放"),
                     const SizedBox(width: 10),
-                    _buildOperation(Icons.money, "开通VIP"),
+                    _buildOperation(Icons.payment, "开通VIP"),
                     const SizedBox(width: 10),
                     _buildOperation(Icons.update, "更新提醒"),
                     const SizedBox(width: 10),
@@ -195,13 +216,14 @@ class _WaterfallState extends State<WaterfallPage> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
                               "畅享精彩内容",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: 12,
                               ),
                             )
                           ],
