@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_waterfall_samples/data-repository.dart';
 import 'package:flutter_waterfall_samples/focus_container.dart';
 import 'package:flutter_waterfall_samples/movie_data.dart';
+import 'package:flutter_waterfall_samples/type_data.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// waterfall
@@ -27,7 +26,8 @@ class _WaterfallState extends State<WaterfallPage> {
         color: Colors.blue.shade900,
         child: ListView(padding: const EdgeInsets.all(30), children: [
           _buildVideoAndInfo(),
-          _buildTitle("相关推荐"),
+          _buildTypes(),
+          _buildTitle("为你推荐"),
           _buildRecommendMovies(),
         ]),
       );
@@ -280,4 +280,46 @@ class _WaterfallState extends State<WaterfallPage> {
           ],
         ),
       ));
+
+  _buildTypes() {
+    List types = DataRepository.provideTypes();
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 6,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 15,
+        childAspectRatio: 1 / 0.4,
+      ),
+      itemCount: types.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _typeItem(types[index]);
+      },
+    ).build(context);
+  }
+
+  _typeItem(TypeData data) => Container(
+        margin: const EdgeInsets.only(top: 10),
+        child: FocusContainer(
+          onTap: () {
+            Fluttertoast.showToast(msg: data.title);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white10,
+            ),
+            child: Center(
+              child: Text(
+                data.title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
 }
