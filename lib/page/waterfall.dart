@@ -31,6 +31,7 @@ class _WaterfallState extends State<Waterfall> {
         SectionTitle(title: "热门推荐：最热影视抢先看"),
         SizedBox(height: 15),
         HotMovies(rows: 1),
+        SizedBox(height: 15),
         SectionTitle(title: "港迷专属：佳作好片一次睇个够！"),
         SizedBox(height: 15),
         HotMovies(rows: 2),
