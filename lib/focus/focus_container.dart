@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// focus_container
 /// Created by wangzhen on 2023/6/23
@@ -72,11 +73,33 @@ class _FocusContainerState extends State<FocusContainer>
         : _container();
   }
 
-  _container() => InkWell(
+  _container() => RawKeyboardListener(
+        onKey: _handleKey,
         focusNode: _focusNode,
-        onTap: () => widget.onTap?.call(),
         child: _focused ? _focusedChild() : widget.child,
       );
+
+  _handleKey(RawKeyEvent event) {
+    if (!isAllow(event)) return;
+    if (event.data is RawKeyEventDataAndroid) {
+      RawKeyEventDataAndroid dataAndroid = event.data as RawKeyEventDataAndroid;
+      int code = dataAndroid.keyCode;
+      if (code == 23 || code == 66) {
+        widget.onTap?.call();
+      }
+    }
+  }
+
+  isAllow(RawKeyEvent event) {
+    bool allow = true;
+    if (event.data is RawKeyEventDataLinux) {
+      bool isDown = (event.data as RawKeyEventDataLinux).isDown;
+      allow = !isDown;
+    } else if (event.data is RawKeyEventDataAndroid) {
+      allow = event is RawKeyUpEvent;
+    }
+    return allow;
+  }
 
   _focusedChild() {
     if (widget.border) {
