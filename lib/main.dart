@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_waterfall_samples/page/video_details.dart';
 
-import 'waterfall.dart';
+import 'page/waterfall.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WaterfallPage(),
+      home: const Waterfall(),
     );
   }
 }
